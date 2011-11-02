@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+	<bean id="alfrescoReportingScript" parent="baseJavaScriptExtension"
+		class="org.alfresco.reporting.AlfrescoReporting">
+		<property name="properties" ref="global-properties" />
+		<property name="extensionName">
+			<value>reporting</value>
+		</property>
+		<property name="serviceRegistry">
+			<ref bean="ServiceRegistry" />
+		</property>
+		<property name="database" value="jdbc:mysql://localhost:3306/alfrescoreporting340" />
+		<property name="jdbcdriver" value="org.gjt.mm.mysql.Driver" />
+		<property name="username" value="alfresco" />
+		<property name="password" value="alfresco" />
+	</bean>
+
+<!--  will also include scheduling -->
+</beans> 
