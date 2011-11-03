@@ -21,7 +21,7 @@ public class DatabaseHelperBean {
 	//private Properties properties;
 	
 	//private String initialTableList = "document,site,folder,person,datalist,datalistitem,package,task,forum,topic,post";
-	
+	/*
 	 public void setMyProperties(Properties properties)
 	 {
 		//this.properties = properties;
@@ -30,7 +30,8 @@ public class DatabaseHelperBean {
 	 	this.database  =properties.getProperty("reporting.url");
 	 	this.jdbcdriver=properties.getProperty("reporting.driver");
 	 }
-	 
+	 */
+	
 	// jdbc:mysql://localhost/AlfrescoReporting340
 	public void setDatabase(String database)
     {

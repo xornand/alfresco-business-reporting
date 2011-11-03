@@ -3,20 +3,29 @@
 
 <beans>
 
-	<bean id="alfrescoReportingScript" parent="baseJavaScriptExtension"
-		class="org.alfresco.reporting.AlfrescoReporting">
-		<property name="properties" ref="global-properties" />
+	<bean id="alfrescoReportingDatabaseHelper" class="org.alfresco.reporting.DatabaseHelperBean" init-method="init" >
+		<property name="database" >
+			<value>jdbc:mysql://localhost:3306/alfrescoreporting</value>
+		</property>
+		<property name="jdbcdriver">
+			<value>org.gjt.mm.mysql.Driver</value>
+		</property>
+		<property name="username">
+			<value>alfresco</value>
+		</property>
+		<property name="password">
+			<value>alfresco</value>
+		</property>
+	</bean>
+	<bean id="alfrescoReportingScript" parent="baseJavaScriptExtension" class="org.alfresco.reporting.AlfrescoReporting" >
 		<property name="extensionName">
 			<value>reporting</value>
 		</property>
 		<property name="serviceRegistry">
 			<ref bean="ServiceRegistry" />
 		</property>
-		<property name="database" value="jdbc:mysql://localhost:3306/alfrescoreporting340" />
-		<property name="jdbcdriver" value="org.gjt.mm.mysql.Driver" />
-		<property name="username" value="alfresco" />
-		<property name="password" value="alfresco" />
+		<property name="databaseHelperBean">
+			<ref bean="alfrescoReportingDatabaseHelper" />
+		</property>
 	</bean>
-
-<!--  will also include scheduling -->
 </beans> 

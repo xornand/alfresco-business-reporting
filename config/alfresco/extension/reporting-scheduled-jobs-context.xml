@@ -35,7 +35,7 @@
                 </property>
                 <property name="cronExpression">
                         <!--  Fire at 21:00 every day -->
-                        <value>0 0/5 * * * ?</value>
+                        <value>0 0 21 * * ?</value>
                 </property>
         </bean>
                         
