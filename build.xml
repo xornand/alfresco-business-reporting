@@ -12,6 +12,7 @@
 	<property name="package.file.jar" value="${build.dir}/${project.name}-${version.id}.jar" />	
 	<property name="project.file.zip" value="${build.dir}/${project.name}-eclipse-project-${version.id}.zip" />
 	<property name="package.file.amp" value="${build.dir}/${project.name}-${version.id}.amp" />
+	<property name="package.file.images" value="${build.dir}/${project.name}-images-${version.id}.zip" />
 	<property name="package.script.file.zip" value="${build.dir}/${project.script.name}-${version.id}.zip" />
 	<property name="package.reporting.file.zip" value="${build.dir}/${project.reporting.name}-${version.id}.zip" />
 	<property name="package.lib.file.zip" value="${build.dir}/${project.lib.name}-${version.id}.zip" />
@@ -87,6 +88,12 @@
 		</zip>
 	</target>
 
+	<target name="package-images" depends="setup" description="Creates a zip called ${package.file.images} which can be imported into CompanyHome">
+		<delete file="${package.file.images}" />
+		<zip destfile="${package.file.images}">
+			<zipfileset dir="${project.dir}/source/web/images" prefix="images"  />
+		</zip>
+	</target>
 	<!--
 	<target name="package-amp" depends="setup,package-jar" description="Packages the customizations as an Alfresco module in ${package.file.amp}">
 		<delete file="${package.file.amp}" />
@@ -121,7 +128,7 @@
 
 
 
-	<target name="package-all" depends="package-jar,package-extension,package-scripts,package-reports,package-libs,zip-project" />
+	<target name="package-all" depends="package-jar,package-extension,package-scripts,package-reports,package-libs,package-images,zip-project" />
 
 	<target name="deploy" depends="package-jar, package-extension, package-libs" description="Unzips the ${package.file.zip} into ${alfresco.web.dir}">
 		<unzip src="${package.file.zip}" dest="${alfresco.tomcat.shared.dir}" />

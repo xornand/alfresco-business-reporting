@@ -6,6 +6,12 @@ var lineSeperator = "~||~";
 var definitionSeperator = "~|enddefinition|~";
 var objectSeperator = "~|endobject|~";
 
+var siteusers_tablename="siteusers";
+var siteusers_columns="site"+defSeperator+types["site"]+"\n" +
+            "username"+defSeperator+types["username"]+"\n" +
+            "role"+defSeperator+types["role"]+"\n" +
+            definitionSeperator+"\n";
+
 //-------------------------------------------------------------
 // the name of the file, carries of the date the last report has run
 var dateDocumentName = "lastReportingDate";
@@ -237,8 +243,9 @@ function main(){
         var counter = 0;   // counts the total number of objects for the given query/table
         var contentTotal = "";
         returnSetOfKeys="\ntype"+defSeperator+types["mimetype"];
+        var mid = storeRefs[s].split(":")[0];
 
-        var filename = table + "-" + storeRefs[s] + ".txt";
+        var filename = table + "-" + mid + ".txt";
 
         logger.log(storeRefs[s] + " Stuffing " + queries[table] + " into " + filename);
 
@@ -308,6 +315,52 @@ function main(){
 } // end function main
 
 //--------------------------------------------------------------------------
+//---------------------------------------
+
+function addSiteUsersPerson(mySite, myRole, user){
+    logger.log("##### Site="+mySite.name+" Role="+myRole + " User="+user.properties["cm:firstName"]+ " " + user.properties["cm:lastName"] + " ("+user.properties["cm:userName"]+")");
+    var sitedef  = "site"+defSeperator+types["site"]+defSeperator+mySite.name;
+    var username = "username"+defSeperator+types["username"]+defSeperator+user.properties["cm:userName"];
+    var role     = "role"+defSeperator+types["role"]+defSeperator+myRole;
+    var nodeid   = "sys_node_uuid"+defSeperator+types["noderef"]+defSeperator+user.properties["sys:node-uuid"];
+    return sitedef+lineSeperator+nodeid+lineSeperator+username+lineSeperator+role;
+}
+
+//---------------------------------------
+
+function executeAllSiteUsers(){
+    var sites = siteService.listSites("",""); // get all sites
+    var mySite="";
+    var nameFilter = "";
+    var limit = -1;
+    var roleFilter = "";
+    var userName="";
+    var user;
+    var returnString="";
+    var userString = "";
+
+    for (var sCounter in sites){                  // loop all Sites
+        mySite = sites[sCounter]; //siteService.getSite(
+        var memberships =  mySite.listMembers(nameFilter,roleFilter ,limit, false);
+        for (userName in memberships)
+        {
+            var membershipRole = memberships[userName];
+            if (userName.match("^GROUP_")) {
+                var theGroup = groups.getGroupForFullAuthorityName(userName);
+                var theMembers = theGroup.getAllUsers();
+                for (user in theMembers){
+                    userString = addSiteUsersPerson(mySite.getNode(),membershipRole, people.getPerson( (theMembers[user]).getShortName() ) );
+                    returnString = returnString + userString+ lineSeperator+ "\n";;
+                } // end theUsers 
+            } else {
+                userString = addSiteUsersPerson(mySite.getNode(),membershipRole, people.getPerson(userName));
+                returnString = returnString + userString + lineSeperator+ "\n";
+            } // end if group
+        } // end for userName
+
+    } // end for sites
+    return returnString;
+}
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -330,3 +383,8 @@ var thisTimestamp = new Date(); // we need to set this date if the run to fill t
 main();
 logger.log("@@ DONE WITH MAIN, finishing up");
 setQueryDate(reportOutput, dateDocumentName, thisTimestamp); // persist the date of this succesfull run
+
+logger.log("## executeAllSiteUsers()!");
+reporting.dropTables(siteusers_tablename);
+reporting.createEmptyTables(siteusers_tablename);
+reporting.processRepositoryUpdate(siteusers_tablename, siteusers_columns + executeAllSiteUsers(), true);

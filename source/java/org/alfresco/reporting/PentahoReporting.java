@@ -164,7 +164,7 @@ public class PentahoReporting implements Reportable {
          * The supported output types for this sample
          */
         public static enum OutputType {
-                 PDF, EXCEL, HTML
+                 PDF, EXCEL
         }
 	/**	
 		 private void generateReport(final OutputType outputType, File outputFile) 

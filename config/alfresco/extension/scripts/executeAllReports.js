@@ -1,5 +1,8 @@
 <import resource="/Company Home/Data Dictionary/Scripts/reporting/alfresco-business-reporting.lib.js">
 
+// We need companyhome, especially if we run from classpath instead of DataDictionary/Repository
+var companyhome = search.luceneSearch("PATH:\"/app:company_home\"")[0];
+
 // ----------- no mutation below this line ---------------------------------------
 
 var reportInputFolder  = companyhome.childByNamePath( reportsInputFolderName );  // get the actual InputFolder
