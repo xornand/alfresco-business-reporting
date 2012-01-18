@@ -31,39 +31,40 @@ function isReportingDefinition(report){
 
 // -------------------------------------------------------------------------------
 
-// Loop all child-documents, and execute the report (it will not execute at all if it is no report)
-for (var i in reportInputFolder.children) {
-  var report = reportInputFolder.children[i];
-
-  if ( isReportingDefinition(report) ){
-    
-    var theName = report.properties["cm:name"];
-    theName = theName.substring(0, theName.lastIndexOf("."));
-    var output = reportOutputFolder.childByNamePath(theName+"."+ext);
-    if (output==null){
-       output=reportOutputFolder.createFile(theName+"."+ext);
-    } // end output==null
-    else { 
-      if (doCheckout){
-        if (!output.hasAspect("cm:versionable")){
-          output.addAspect("cm:versionable");
+if (reporting.isEnabled()){
+	// Loop all child-documents, and execute the report (it will not execute at all if it is no report)
+	for (var i in reportInputFolder.children) {
+	  var report = reportInputFolder.children[i];
+	
+	  if ( isReportingDefinition(report) ){
+	    
+	    var theName = report.properties["cm:name"];
+	    theName = theName.substring(0, theName.lastIndexOf("."));
+	    var output = reportOutputFolder.childByNamePath(theName+"."+ext);
+	    if (output==null){
+	       output=reportOutputFolder.createFile(theName+"."+ext);
+	    } // end output==null
+	    else { 
+	      if (doCheckout){
+	        if (!output.hasAspect("cm:versionable")){
+	          output.addAspect("cm:versionable");
+		}
+	        output = output.checkout();
+	        isCheckedOut = true;
+	      } // end doCheckout
+	    } // end if/else
+	
+	    logger.log("Preparing to exec: ");
+	    logger.log(" -From: " + report.properties["cm:name"] + " ("+ report.nodeRef +")");
+	    logger.log(" -To:   " + output.properties["cm:name"] + " (" + output.nodeRef+")");
+	
+	    reporting.processReport(report.nodeRef, output.nodeRef, ext);
+	    if (isCheckedOut && doCheckout) {
+	      output = output.checkin( checkinMessage );
+	    }
+	    logger.log("Done generating " + output.properties["cm:name"]);
+	  } //end if report.isDocument 
 	}
-        output = output.checkout();
-        isCheckedOut = true;
-      } // end doCheckout
-    } // end if/else
-
-    logger.log("Preparing to exec: ");
-    logger.log(" -From: " + report.properties["cm:name"] + " ("+ report.nodeRef +")");
-    logger.log(" -To:   " + output.properties["cm:name"] + " (" + output.nodeRef+")");
-
-    reporting.processReport(report.nodeRef, output.nodeRef, ext);
-    if (isCheckedOut && doCheckout) {
-      output = output.checkin( checkinMessage );
-    }
-    logger.log("Done generating " + output.properties["cm:name"]);
-  } //end if report.isDocument 
-}
-
+} // end if isEnabled
 
 

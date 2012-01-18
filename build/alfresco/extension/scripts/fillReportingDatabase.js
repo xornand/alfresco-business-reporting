@@ -369,22 +369,23 @@ function executeAllSiteUsers(){
 //reporting.dropTables(fileString);
 //reporting.createEmptyTables(fileString);
 
-
-var reportOutput = companyhome.childByNamePath(reportsLogFolderName);
-if (!reportOutput) {
-  reportOutput = companyhome.createFolder(reportsLogFolderName);
-  reportOutput.save();
-}
-
-dateQuery = getQueryDate(reportOutput, dateDocumentName); // this contains the date of the last succesfull run
-logger.log("@@ new dateQuery=" + dateQuery);
-var thisTimestamp = new Date(); // we need to set this date if the run to fill the reporting DB was succesfull
-
-main();
-logger.log("@@ DONE WITH MAIN, finishing up");
-setQueryDate(reportOutput, dateDocumentName, thisTimestamp); // persist the date of this succesfull run
-
-logger.log("## executeAllSiteUsers()!");
-reporting.dropTables(siteusers_tablename);
-reporting.createEmptyTables(siteusers_tablename);
-reporting.processRepositoryUpdate(siteusers_tablename, siteusers_columns + executeAllSiteUsers(), true);
+if (reporting.isEnabled()){
+	var reportOutput = companyhome.childByNamePath(reportsLogFolderName);
+	if (!reportOutput) {
+	  reportOutput = companyhome.createFolder(reportsLogFolderName);
+	  reportOutput.save();
+	}
+	
+	dateQuery = getQueryDate(reportOutput, dateDocumentName); // this contains the date of the last succesfull run
+	logger.log("@@ new dateQuery=" + dateQuery);
+	var thisTimestamp = new Date(); // we need to set this date if the run to fill the reporting DB was succesfull
+	
+	main();
+	logger.log("@@ DONE WITH MAIN, finishing up");
+	setQueryDate(reportOutput, dateDocumentName, thisTimestamp); // persist the date of this succesfull run
+	
+	logger.log("## executeAllSiteUsers()!");
+	reporting.dropTables(siteusers_tablename);
+	reporting.createEmptyTables(siteusers_tablename);
+	reporting.processRepositoryUpdate(siteusers_tablename, siteusers_columns + executeAllSiteUsers(), true);
+} // end if isEnabled

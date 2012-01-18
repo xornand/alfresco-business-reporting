@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -18,7 +19,7 @@ public class DatabaseHelperBean {
 	private String username;
 	private String password;
 	private Connection conn;
-	//private Properties properties;
+	private Properties globalProperties;
 	
 	//private String initialTableList = "document,site,folder,person,datalist,datalistitem,package,task,forum,topic,post";
 	/*
@@ -31,7 +32,23 @@ public class DatabaseHelperBean {
 	 	this.jdbcdriver=properties.getProperty("reporting.driver");
 	 }
 	 */
-	
+    public void setProperties(Properties properties){
+    	this.globalProperties = properties;
+    }
+    
+    public void logAllProperties(){
+ 
+    	String returnString = "Size: " + globalProperties.size()+" - "; 
+    	Enumeration keys = globalProperties.keys();
+   		while (keys.hasMoreElements()){
+   			String key = (String)keys.nextElement();
+   			if (key.indexOf("reporting.")>-1){
+	   			logger.debug(key+"="+globalProperties.getProperty(key));
+	   			returnString += key+"="+globalProperties.getProperty(key)+"\n";
+   			}
+   		}
+
+    }
 	// jdbc:mysql://localhost/AlfrescoReporting340
 	public void setDatabase(String database)
     {
@@ -57,43 +74,80 @@ public class DatabaseHelperBean {
 	public void init(){
 		logger.debug("Starting getTableDescription");
 		Statement stmt=null;
-		try {
-			stmt = getConnection().createStatement();
-			String sql = "SHOW TABLES;";
-		    ResultSet rs = stmt.executeQuery(sql);
-		    
-		    while(rs.next()){
-		         //Retrieve by column number
-		    	String table = rs.getString(1);
-		    	sql = "SELECT COUNT(*) FROM " + table;
-		    	Statement stmt2 = getConnection().createStatement();
-		    	ResultSet rs2 = stmt2.executeQuery(sql);
-			    while(rs2.next()){
-			    	logger.info("  " + table + " ("+ rs2.getLong(1)+ ")");	
+		if (isEnabled()){
+			try {
+				stmt = getConnection().createStatement();
+				String sql = "SHOW TABLES;";
+			    ResultSet rs = stmt.executeQuery(sql);
+			    
+			    while(rs.next()){
+			         //Retrieve by column number
+			    	String table = rs.getString(1);
+			    	sql = "SELECT COUNT(*) FROM " + table;
+			    	Statement stmt2 = getConnection().createStatement();
+			    	ResultSet rs2 = stmt2.executeQuery(sql);
+				    while(rs2.next()){
+				    	logger.info("  " + table + " ("+ rs2.getLong(1)+ ")");	
+				    }
 			    }
-		    }
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-		      //finally block used to close resources
-			  try{
-			     if(stmt!=null)
-			        stmt.close();
-			  }catch(SQLException se2){
-		      }// nothing we can do
-		}	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+			      //finally block used to close resources
+				  try{
+				     if(stmt!=null)
+				        stmt.close();
+				  }catch(SQLException se2){
+			      }// nothing we can do
+			}	
+		} else {
+			logger.warn("Alfresco Business Reporting is not enabled...");
+		}
+		
 	}
 	
+    private boolean isEnabled(){
+    	boolean returnBoolean = !globalProperties.getProperty("reporting.enabled").equalsIgnoreCase("false");
+    	return returnBoolean;
+    }
+    
+    private String replaceAllKeysInValue(String inString){
+    	String first="";
+    	String last="";
+    	String key="";
+    	while (inString.indexOf("$")>-1){
+    		first= inString.substring(0,inString.indexOf("${"));
+    		last = inString.substring(inString.indexOf("}")+1, inString.length());
+    		key  = inString.substring(inString.indexOf("${")+2,inString.indexOf("}"));
+    		logger.debug("Key="+key);
+    		inString = first + globalProperties.getProperty(key,"") + last;
+    	}
+    	return inString;
+    }
+    
 	public Connection getConnection(){
 		try {
 			if ((this.conn == null) || conn.isClosed()){
+				database   = globalProperties.getProperty("reporting.db.url");
+				jdbcdriver = globalProperties.getProperty("reporting.db.driver");
+				username   = globalProperties.getProperty("reporting.db.username");
+				password   = globalProperties.getProperty("reporting.db.password");
+
+				database   = replaceAllKeysInValue(database);
+				jdbcdriver = replaceAllKeysInValue(jdbcdriver);
+				username   = replaceAllKeysInValue(username);
+				password   = replaceAllKeysInValue(password);
+				
+				logger.debug("Enabled    : " + isEnabled());
 				logger.debug("DatabaseURL: " + database);
 				logger.debug("JDBC Driver: " + jdbcdriver);
 				logger.debug("Username   : " + username);
-				Class.forName(jdbcdriver);
-				logger.info("Connecting to database " + database);
-				conn = DriverManager.getConnection(database,username,password);
+				if (isEnabled()){
+					Class.forName(jdbcdriver);
+					logger.info("Connecting to database " + database);
+					conn = DriverManager.getConnection(database,username,password);
+				}
 			}
 	   } catch(SQLException se){
 		      //Handle errors for JDBC

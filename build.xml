@@ -6,16 +6,17 @@
 	<property name="build.dir" value="${project.dir}/build" />
 	<property name="source.dir" value="${project.dir}/source/java" />
 	<property name="bin.dir" value="${project.dir}/bin" />
+	<property name="dist.dir" value="${project.dir}/dist" />
 	<property name="datadictionary.scripts.dir" value="${project.dir}/source/data-dictionary/Scripts" />
 	<property name="reporting.dir" value="${project.dir}/AlfrescoBusinessReporting" />
-	<property name="package.file.zip" value="${build.dir}/${project.name}-${version.id}.zip" />
-	<property name="package.file.jar" value="${build.dir}/${project.name}-${version.id}.jar" />	
-	<property name="project.file.zip" value="${build.dir}/${project.name}-eclipse-project-${version.id}.zip" />
-	<property name="package.file.amp" value="${build.dir}/${project.name}-${version.id}.amp" />
-	<property name="package.file.images" value="${build.dir}/${project.name}-images-${version.id}.zip" />
-	<property name="package.script.file.zip" value="${build.dir}/${project.script.name}-${version.id}.zip" />
-	<property name="package.reporting.file.zip" value="${build.dir}/${project.reporting.name}-${version.id}.zip" />
-	<property name="package.lib.file.zip" value="${build.dir}/${project.lib.name}-${version.id}.zip" />
+	<property name="package.file.zip" value="${dist.dir}/${project.name}-${version.id}.zip" />
+	<property name="package.file.jar" value="${dist.dir}/${project.name}-${version.id}.jar" />	
+	<property name="project.file.zip" value="${dist.dir}/${project.name}-eclipse-project-${version.id}.zip" />
+	<property name="package.file.amp" value="${dist.dir}/${project.name}-${version.id}.amp" />
+	<property name="package.file.images" value="${dist.dir}/${project.name}-images-${version.id}.zip" />
+	<property name="package.script.file.zip" value="${dist.dir}/${project.script.name}-${version.id}.zip" />
+	<property name="package.reporting.file.zip" value="${dist.dir}/${project.reporting.name}-${version.id}.zip" />
+	<property name="package.lib.file.zip" value="${dist.dir}/${project.lib.name}-${version.id}.zip" />
 	<property name="module.dir" value="/module" />
 	<property name="config.dir" value="${project.dir}/config/alfresco/" />
 	<property name="web.dir" value="${project.dir}/source/web" />
@@ -33,6 +34,7 @@
 	<target name="setup" description="Creates the ${build.dir} and ${bin.dir} directories">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${dist-dir}" />
 		<mkdir dir="${config.dir}${module.dir}/${module.id}" />
 	</target>
 	
@@ -44,10 +46,12 @@
 
 	<target name="compile" description="compiles src to the build/classes folder">
 		<mkdir dir="${build.dir}" />
-		<javac srcdir="${source.dir}" destdir="${build.dir}" source="1.6" target="1.6" debug="on" fork="yes">
+		<javac srcdir="${source.dir}" destdir="${build.dir}" source="1.6" target="1.6" >
 			<classpath refid="classpath" />
+			<compilerarg value="-Xlint:unchecked"/>
 		</javac>
 		<copy todir="${build.dir}">
+			<fileset dir="${web.dir}" includes="META-INF/**" />
 			<fileset dir="${source.dir}" excludes="**/*.java" />
 		</copy>
 	</target>
@@ -55,14 +59,16 @@
 	<target name="package-jar" depends="setup, compile" description="Compile and package the java source into the ${dist.dir}">
 		<delete file="${package.file.jar}" />
 		<jar destfile="${package.file.jar}">
-			<fileset dir="${build.dir}" includes="org/alfresco/**" />
+			<metainf dir="${build.dir}/META-INF" />
+			<fileset dir="${build.dir}" includes="org/alfresco/**,alfresco/**" excludes="alfresco/*.xml"  />
 		</jar>
 	</target>
 
-	<target name="package-extension" depends="setup" description="Creates a zip called ${package.file.zip} which can be unzipped on top of an exploded Alfresco web app">
+	<target name="package-extension" depends="setup,  package-jar">
 		<delete file="${package.file.zip}" />
-		<zip destfile="${package.file.zip}" update="true">
-			<zipfileset dir="${config.dir}" prefix="alfresco/" />
+		<zip destfile="${package.file.zip}">
+			<zipfileset file="${package.file.jar}" prefix="WEB-INF/lib" />
+			<zipfileset dir="${web.dir}" excludes="META-INF/**" />
 		</zip>
 	</target>
 
@@ -94,30 +100,8 @@
 			<zipfileset dir="${project.dir}/source/web/images" prefix="images"  />
 		</zip>
 	</target>
-	<!--
-	<target name="package-amp" depends="setup,package-jar" description="Packages the customizations as an Alfresco module in ${package.file.amp}">
-		<delete file="${package.file.amp}" />
-		<zip destfile="${package.file.amp}">
-			<zipfileset file="${package.file.jar}" prefix="lib" />
-			<zipfileset dir="${web.dir}" prefix="web" />
-			<zipfileset dir="${config.dir}" prefix="config/alfresco" />
-			<zipfileset file="${project.dir}/file-mapping.properties" />
-			<zipfileset file="${project.dir}/module.properties" />
-			<zipfileset file="${config.dir}${module.dir}/${module.id}/module-context.xml" prefix="config${module.dir}/${module.id}" />
-			<zipfileset file="${config.dir}${extension.dir}/web-client-config-custom.xml" prefix="config${module.dir}/${module.id}/ui" />
-		</zip>
-	</target>
 
-	<target name="install-amp" depends="package-amp" description="Uses the Alfresco MMT to install the AMP into ${alfresco.war.path}">
-		<java dir="." fork="true" jar="${alfresco.mmt.dir}/alfresco-mmt.jar">
-			<arg line="install ${package.file.amp} ${alfresco.war.path} -force -verbose" />
-		</java>
-	</target>
 
-	<target name="deploy-amp" depends="install-amp" description="Unzips the AMP'd WAR file into ${alfresco.web.dir}">
-		<unzip src="${alfresco.war.path}" dest="${alfresco.web.dir}" />
-	</target>
-	-->
 
 	<target name="zip-project" depends="setup" description="Zips the entire Eclipse project as-is into ${project.file.zip}">
 		<delete file="${project.file.zip}" />

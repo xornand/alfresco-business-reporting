@@ -42,7 +42,7 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
 	private ServiceRegistry serviceRegistry;
 
 	private String blacklist=",";
-	
+	private Properties globalProperties;
 	private Properties namespaces = null;
 	private DatabaseHelperBean dbhb = null;
 
@@ -59,6 +59,29 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
 		this.dbhb = databaseHelperBean;
 	}
 	
+	   public void setProperties(Properties properties){
+	    	this.globalProperties = properties;
+	    }
+	    
+	    public void logAllProperties(){
+	 
+	    	String returnString = "Size: " + globalProperties.size()+" - "; 
+	    	Enumeration keys = globalProperties.keys();
+	   		while (keys.hasMoreElements()){
+	   			String key = (String)keys.nextElement();
+	   			if (key.indexOf("reporting.")>-1){
+		   			logger.debug(key+"="+globalProperties.getProperty(key));
+		   			returnString += key+"="+globalProperties.getProperty(key)+"\n";
+	   			}
+	   		}
+
+	    }
+	    
+	    public boolean isEnabled(){
+	    	boolean returnBoolean = !globalProperties.getProperty("reporting.enabled").equalsIgnoreCase("false");
+	    	return returnBoolean;
+	    }
+	    
 	public AlfrescoReporting(){
 		logger.info("Starting AlfrescoReporting module (Constructor)");
 	}
@@ -186,93 +209,96 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
     	String seperator = "~|~";
     	String properties = "";
     	
-    	try {
-			stmt = dbhb.getConnection().createStatement();
-			dbhb.getConnection().setAutoCommit(true);
-			tableDesc = dbhb.getTableDescription(stmt, table);
-			logger.debug("Got the description ");
-			String key  ="";
-			String type = "";
-			String value = "";
-			int numberOfRows=0;
-			ReportLine rl = new ReportLine(table);// container for description of 1 Object containing n properties
-			String state = "DEFINITION"; //choice of DEFINITION or DATA
-	    	for (String line : lines){
-	    		logger.debug(line);
-	    		line = line.trim();
-	    		if (line.equals("~|enddefinition|~")) {
-	    			state="DATA";
-	    		} else {
-		    		
-		    		if (state.equals("DEFINITION") && (line != null) && (line.indexOf("~|~")>-1)){
-		    			key = line.substring(0, line.indexOf("~|~"));
-		    			type = line.substring(line.indexOf("~|~")+3, line.length());
-		    			key = replaceNameSpaces(key.trim());
-						//logger.debug("DEFINITION Found column: " + key +" and type: " + type);
-		    			// ignore datatypes that cannot be matched to SQL types (like associations)
-						if ((!"IGNORE".equals(type)) && (!tableDesc.containsKey(key))){ 
-							dbhb.extendTable(stmt, table, key, type);
-						} else {
-							logger.debug("DEFINITION Column " + key + " already exists.");
-						} 
-		    		} // end if DEFINITON
-		    		
-		    		if (state.equals("DATA")){
-		    			numberOfRows = 0;
-		    			while ((line != null) && (line.indexOf("~||~") > 0)){
-		    				properties = line.substring(0, line.indexOf("~||~"));
-		    				line  = line.substring(line.indexOf("~||~")+4, line.length());
-		    				if (null!=properties){
-			    				int c = properties.indexOf("~|~");
-			    				if (c>0){
-				    				key   = properties.substring(0,c);
-				    				type  = properties.substring(c+3, properties.lastIndexOf("~|~") );
-				    				value = properties.substring(properties.lastIndexOf("~|~")+3, properties.length());
-				    				// ignore property types of IGNORE, these cannot be mapped to SQL (like assocs)
-				    				if (!"IGNORE".equals(type)){
-				    					rl.setLine(key, type, value);
-				    				} //end if type != IGNORE
-			    				} // end if (c>0)
-		    				} // end if null!=properties... WTF, how can this happen?
-		    			} // end while
-		    			try{
-		    				if ( (rl.size()>0) && (rl.getValue("sys_node_uuid").length()>5)){
-			    				logger.debug("insertOnly="+insertOnly+" row exists?");
-			    				if (!insertOnly && dbhb.rowExists(stmt, rl)){
-			    					logger.debug("Going UPDATE");
-			    					numberOfRows = dbhb.updateIntoTable(stmt, rl);
-			    					logger.debug(numberOfRows+ " rows updated");
-			    				} else {
-			    					logger.debug("Going INSERT");
-			    					numberOfRows = dbhb.insertIntoTable(stmt, rl);
-			    					logger.debug(numberOfRows+ " rows inserted");
+    	if (isEnabled()){
+	    	try {
+				stmt = dbhb.getConnection().createStatement();
+				dbhb.getConnection().setAutoCommit(true);
+				tableDesc = dbhb.getTableDescription(stmt, table);
+				logger.debug("Got the description ");
+				String key  ="";
+				String type = "";
+				String value = "";
+				int numberOfRows=0;
+				ReportLine rl = new ReportLine(table);// container for description of 1 Object containing n properties
+				String state = "DEFINITION"; //choice of DEFINITION or DATA
+		    	for (String line : lines){
+		    		logger.debug(line);
+		    		line = line.trim();
+		    		if (line.equals("~|enddefinition|~")) {
+		    			state="DATA";
+		    		} else {
+			    		
+			    		if (state.equals("DEFINITION") && (line != null) && (line.indexOf("~|~")>-1)){
+			    			key = line.substring(0, line.indexOf("~|~"));
+			    			type = line.substring(line.indexOf("~|~")+3, line.length());
+			    			key = replaceNameSpaces(key.trim());
+							//logger.debug("DEFINITION Found column: " + key +" and type: " + type);
+			    			// ignore datatypes that cannot be matched to SQL types (like associations)
+							if ((!"IGNORE".equals(type)) && (!tableDesc.containsKey(key))){ 
+								dbhb.extendTable(stmt, table, key, type);
+							} else {
+								logger.debug("DEFINITION Column " + key + " already exists.");
+							} 
+			    		} // end if DEFINITON
+			    		
+			    		if (state.equals("DATA")){
+			    			numberOfRows = 0;
+			    			while ((line != null) && (line.indexOf("~||~") > 0)){
+			    				properties = line.substring(0, line.indexOf("~||~"));
+			    				line  = line.substring(line.indexOf("~||~")+4, line.length());
+			    				if (null!=properties){
+				    				int c = properties.indexOf("~|~");
+				    				if (c>0){
+					    				key   = properties.substring(0,c);
+					    				type  = properties.substring(c+3, properties.lastIndexOf("~|~") );
+					    				value = properties.substring(properties.lastIndexOf("~|~")+3, properties.length());
+					    				// ignore property types of IGNORE, these cannot be mapped to SQL (like assocs)
+					    				if (!"IGNORE".equals(type)){
+					    					rl.setLine(key, type, value);
+					    				} //end if type != IGNORE
+				    				} // end if (c>0)
+			    				} // end if null!=properties... WTF, how can this happen?
+			    			} // end while
+			    			try{
+			    				if ( (rl.size()>0) && (rl.getValue("sys_node_uuid").length()>5)){
+				    				logger.debug("insertOnly="+insertOnly+" row exists?");
+				    				if (!insertOnly && dbhb.rowExists(stmt, rl)){
+				    					logger.debug("Going UPDATE");
+				    					numberOfRows = dbhb.updateIntoTable(stmt, rl);
+				    					logger.debug(numberOfRows+ " rows updated");
+				    				} else {
+				    					logger.debug("Going INSERT");
+				    					numberOfRows = dbhb.insertIntoTable(stmt, rl);
+				    					logger.debug(numberOfRows+ " rows inserted");
+				    				}
 			    				}
+			    			} catch (SQLException e){
+		    					logger.error("Error in insert/update against table " + table);
+		    					logger.error(e);
+		    					e.printStackTrace();
+		    				} finally {
+		    					rl.reset();
 		    				}
-		    			} catch (SQLException e){
-	    					logger.error("Error in insert/update against table " + table);
-	    					logger.error(e);
-	    					e.printStackTrace();
-	    				} finally {
-	    					rl.reset();
-	    				}
-		    			
-		    		} //end if DATA
-	    		} // end else
-			} // end for line:lines
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			logger.error(e);
-			e.printStackTrace();
-		} finally {
-		      //finally block used to close resources
-			  try{
-			     if(stmt!=null)
-			        stmt.close();
-			  }catch(SQLException se2){
-		      }// nothing we can do
-		}    	
-
+			    			
+			    		} //end if DATA
+		    		} // end else
+				} // end for line:lines
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				logger.error(e);
+				e.printStackTrace();
+			} finally {
+			      //finally block used to close resources
+				  try{
+				     if(stmt!=null)
+				        stmt.close();
+				  }catch(SQLException se2){
+			      }// nothing we can do
+			}    	
+    	} else {
+    		logger.warn("Alfresco Business Reporting is NOT enabled.");
+    	}
     }
 
     
@@ -306,30 +332,34 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
      */
     public void processReport(NodeRef inputNodeRef, NodeRef outputNodeRef, String outputType){
     	logger.debug("starting ProcessReport generating a " + outputType);
-    	String name = serviceRegistry.getNodeService().getProperty(inputNodeRef, ContentModel.PROP_NAME).toString();
-    	Reportable reportable = null;
-    	if (name.toLowerCase().endsWith(".jrxml") || name.toLowerCase().endsWith(".jasper")){
-    		logger.debug("It is a Jasper thingy!");
-    		reportable = new JasperReporting();
-    	}
-    	if (name.endsWith(PentahoReporting.EXTENSION)){
-    		logger.debug("It is a Pentaho thingy!");
-    		reportable = new PentahoReporting();
-    	}
-    	if (reportable!= null){
-    		reportable.setUsername(dbhb.getUsername());
-    		reportable.setPassword(dbhb.getPassword());
-    		reportable.setDriver(dbhb.getJdbcDriver());
-    		reportable.setUrl(dbhb.getDatabase());
-    		//reportable.setConnection(dbhb.getConnection());
-			reportable.setServiceRegistry(serviceRegistry);
-			reportable.setReportDefinition(inputNodeRef);
-			reportable.setOutputFormat(outputType);
-			reportable.setResultObject(outputNodeRef);
-			logger.debug("Lets go processReport!");
-			reportable.processReport();
+    	if (isEnabled()){
+	    	String name = serviceRegistry.getNodeService().getProperty(inputNodeRef, ContentModel.PROP_NAME).toString();
+	    	Reportable reportable = null;
+	    	if (name.toLowerCase().endsWith(".jrxml") || name.toLowerCase().endsWith(".jasper")){
+	    		logger.debug("It is a Jasper thingy!");
+	    		reportable = new JasperReporting();
+	    	}
+	    	if (name.endsWith(PentahoReporting.EXTENSION)){
+	    		logger.debug("It is a Pentaho thingy!");
+	    		reportable = new PentahoReporting();
+	    	}
+	    	if (reportable!= null){
+	    		reportable.setUsername(dbhb.getUsername());
+	    		reportable.setPassword(dbhb.getPassword());
+	    		reportable.setDriver(dbhb.getJdbcDriver());
+	    		reportable.setUrl(dbhb.getDatabase());
+	    		//reportable.setConnection(dbhb.getConnection());
+				reportable.setServiceRegistry(serviceRegistry);
+				reportable.setReportDefinition(inputNodeRef);
+				reportable.setOutputFormat(outputType);
+				reportable.setResultObject(outputNodeRef);
+				logger.debug("Lets go processReport!");
+				reportable.processReport();
+	    	} else {
+	    		logger.error(name + " is not a valid report definition");
+	    	}
     	} else {
-    		logger.error(name + " is not a valid report definition");
+    		logger.warn("Alfresco Business Reporting is NOT enabled...");
     	}
     }
     
