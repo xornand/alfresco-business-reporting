@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/pentaho-database-4.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.14.jar"/>
+	<classpathentry kind="lib" path="lib/libbase-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/libformula-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/libpixie-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/jasperreports-4.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/libloader-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-core-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-drill-down-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-hibernate-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-kettle-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-mondrian-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-olap4j-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-pmd-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-reportdesigner-parser-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-sampledata-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-scripting-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-toc-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-xpath-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-legacy-charts-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-legacy-functions-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-wizard-core-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-wizard-xul-3.7.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-versionchecker-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/itext-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/itext-rtf-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.9.jar"/>
+	<classpathentry kind="lib" path="lib/libdocbundle-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/libfonts-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/libformat-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/libformula-ui-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/libpensol-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/librepository-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/libserializer-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/libsparkline-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/libswing-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/libxml-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-connections-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-cwm-1.5.4.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-metadata-3.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-mql-editor-3.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-publisher-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/simple-jndi-0.11.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/tms.jar"/>
+	<classpathentry kind="lib" path="lib/xmlsec-1.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/xpp3-1.1.3_8.jar"/>
+	<classpathentry kind="lib" path="C:/bin/alfresco345ibfd/tomcat/webapps/alfresco/WEB-INF/lib/fscontext.jar"/>
+	<classpathentry kind="lib" path="C:/bin/alfresco345ibfd/tomcat/webapps/alfresco/WEB-INF/lib/jndi.jar"/>
+	<classpathentry kind="lib" path="C:/bin/alfresco345ibfd/tomcat/webapps/alfresco/WEB-INF/lib/providerutil.jar"/>
+	<classpathentry kind="lib" path="C:/bin/alfresco345ibfd/tomcat/webapps/alfresco/WEB-INF/lib/simple-jndi-0.11.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tpeelen/workspace/alfresco-business-reporting/lib/mysql-connector-java-5.1.20-bin.jar"/>
+	<classpathentry kind="lib" path="C:/bin/alfresco345ibfd/newrelic221/newrelic-api.jar"/>
+	<classpathentry kind="lib" path="lib/json-simple-1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SDK AlfrescoEmbedded346"/>
+	<classpathentry kind="lib" path="C:/bin/alfresco345ibfd/tomcat/webapps/alfresco/WEB-INF/lib/commons-dbcp-1.4-patched.jar"/>
+	<classpathentry kind="lib" path="C:/bin/alfresco345ibfd/tomcat/webapps/alfresco/WEB-INF/lib/commons-pool-1.5.5.jar"/>
+	<classpathentry kind="lib" path="/SDK AlfrescoEmbedded401/dependencies/mybatis-3.0.4-patched.jar"/>
+	<classpathentry kind="lib" path="/SDK AlfrescoEmbedded401/dependencies/mybatis-spring-1.0.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
