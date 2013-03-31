@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry combineaccessrules="false" kind="src" path="/SDK AlfrescoEmbedded342"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/pentaho-database-4.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-metadata-3.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-core-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-drill-down-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-scripting-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-toc-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-classic-extensions-xpath-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.14.jar"/>
+	<classpathentry kind="lib" path="lib/libbase-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/libformula-1.2.3.jar"/>
+	<classpathentry kind="lib" path="lib/libpixie-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/jasperreports-4.0.2.jar"/>
+	<classpathentry kind="lib" path="/home/tpeelen/workspace/Alfresco-business-reporting/lib/pentaho-reporting-engine-legacy-charts-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="/home/tpeelen/workspace/Alfresco-business-reporting/lib/pentaho-reporting-engine-legacy-functions-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-legacy-charts-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-reporting-engine-legacy-functions-3.8.0-GA.jar"/>
+	<classpathentry kind="lib" path="/home/tpeelen/workspace/Alfresco-business-reporting/lib/libloader-1.2.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<beans> 
+
+	<!-- Use substitution values in this config. -->
+<!-- 
+	<bean id="reportingConfigurationProperties" 
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		
+		<property name="locations">
+			<list>
+				<value>jar:*!/alfresco/extension/reporting-cron.properties</value>
+			</list>
+		</property>
+        <property name="searchSystemEnvironment">
+            <value>false</value>
+        </property>
+	</bean>
+-->
+<!--  Filling the reporting database -->
+
+     <bean id="moreFrequentHarvestingDatabaseJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+             <property name="jobClass">
+                     <value>org.alfresco.repo.jscript.ExecuteScriptJob</value>
+             </property>
+             <property name="jobDataAsMap">
+                     <map>
+                             <entry key="scriptService">
+                                     <ref bean="ScriptService" />
+                             </entry>
+                             <entry key="scriptLocation">
+                                     <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
+                                             <constructor-arg>
+                                                     <value>alfresco/module/org.alfresco.reporting/scripts/harvestDatabaseMoreFrequent.js</value>
+                                             </constructor-arg>
+                                     </bean>
+                             </entry>
+                             <entry key="authenticationComponent">
+                                     <ref bean="authenticationComponent" />
+                             </entry>
+                     </map>
+             </property>
+     </bean>
+
+     <bean id="scheduledMoreFrequentHarvestingDatabaseTrigger" class="org.alfresco.util.CronTriggerBean">
+          <property name="jobDetail">
+                  <ref bean="moreFrequentHarvestingDatabaseJob" />
+          </property>
+          <property name="scheduler">
+                  <ref bean="schedulerFactory" />
+          </property>
+          <property name="cronExpression">
+                  <!--  Fire at every hour day -->
+                     <value>${reporting.cron.harvest.moreFrequent}</value>
+             </property>
+     </bean>
+     
+     <!-- LessFrequent Harvesting stuff -->     
+     <bean id="lessFrequentHarvestingDatabaseJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+             <property name="jobClass">
+                     <value>org.alfresco.repo.jscript.ExecuteScriptJob</value>
+             </property>
+             <property name="jobDataAsMap">
+                     <map>
+                             <entry key="scriptService">
+                                     <ref bean="ScriptService" />
+                             </entry>
+                             <entry key="scriptLocation">
+                                     <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
+                                             <constructor-arg>
+                                                     <value>alfresco/module/org.alfresco.reporting/scripts/harvestDatabaseLessFrequent.js</value>
+                                             </constructor-arg>
+                                     </bean>
+                             </entry>
+                             <entry key="authenticationComponent">
+                                     <ref bean="authenticationComponent" />
+                             </entry>
+                     </map>
+             </property>
+     </bean>
+
+     <bean id="scheduledLessFrequentHarvstingDatabaseTrigger" class="org.alfresco.util.CronTriggerBean">
+          <property name="jobDetail">
+                  <ref bean="lessFrequentHarvestingDatabaseJob" />
+          </property>
+          <property name="scheduler">
+                  <ref bean="schedulerFactory" />
+          </property>
+          <property name="cronExpression">
+               <!--  Fire at 21:00 every day -->
+                  <value>${reporting.cron.harvest.lessFrequent}</value>
+          </property>
+     </bean>
+        
+<!-- Executing all reports -->
+     
+     <bean id="scheduledReportExecuterJobHourly" class="org.springframework.scheduling.quartz.JobDetailBean">
+             <property name="jobClass">
+                     <value>org.alfresco.repo.jscript.ExecuteScriptJob</value>
+             </property>
+             <property name="jobDataAsMap">
+                     <map>
+                             <entry key="scriptService">
+                                     <ref bean="ScriptService" />
+                             </entry>
+                             <entry key="scriptLocation">
+                                     <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
+                                             <constructor-arg>
+                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerHourly.js</value>
+                                             </constructor-arg>
+                                     </bean>
+                             </entry>
+                             <entry key="authenticationComponent">
+                                     <ref bean="authenticationComponent" />
+                             </entry>
+                     </map>
+             </property>
+     </bean>
+
+     <bean id="scheduledReportExecuterTriggerHourly" class="org.alfresco.util.CronTriggerBean">
+             <property name="jobDetail">
+                     <ref bean="scheduledReportExecuterJobHourly" />
+             </property>
+             <property name="scheduler">
+                     <ref bean="schedulerFactory" />
+             </property>
+             <property name="cronExpression">
+                     <!--  Fire at 21:00 every day -->
+                     <value>${reporting.execution.frequency.hourly}</value>
+             </property>
+     </bean>
+
+<!--  ###############################################  -->
+
+	<bean id="scheduledReportExecuterJobDaily" class="org.springframework.scheduling.quartz.JobDetailBean">
+             <property name="jobClass">
+                     <value>org.alfresco.repo.jscript.ExecuteScriptJob</value>
+             </property>
+             <property name="jobDataAsMap">
+                     <map>
+                             <entry key="scriptService">
+                                     <ref bean="ScriptService" />
+                             </entry>
+                             <entry key="scriptLocation">
+                                     <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
+                                             <constructor-arg>
+                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerDaily.js</value>
+                                             </constructor-arg>
+                                     </bean>
+                             </entry>
+                             <entry key="authenticationComponent">
+                                     <ref bean="authenticationComponent" />
+                             </entry>
+                     </map>
+             </property>
+     </bean>
+
+     <bean id="scheduledReportExecuterTriggerDaily" class="org.alfresco.util.CronTriggerBean">
+             <property name="jobDetail">
+                     <ref bean="scheduledReportExecuterJobDaily" />
+             </property>
+             <property name="scheduler">
+                     <ref bean="schedulerFactory" />
+             </property>
+             <property name="cronExpression">
+                     <!--  Fire at 21:00 every day -->
+                     <value>${reporting.execution.frequency.daily}</value>
+             </property>
+     </bean>
+	
+<!--  ###############################################  -->
+
+	<bean id="scheduledReportExecuterJobWeekly" class="org.springframework.scheduling.quartz.JobDetailBean">
+             <property name="jobClass">
+                     <value>org.alfresco.repo.jscript.ExecuteScriptJob</value>
+             </property>
+             <property name="jobDataAsMap">
+                     <map>
+                             <entry key="scriptService">
+                                     <ref bean="ScriptService" />
+                             </entry>
+                             <entry key="scriptLocation">
+                                     <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
+                                             <constructor-arg>
+                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerWeekly.js</value>
+                                             </constructor-arg>
+                                     </bean>
+                             </entry>
+                             <entry key="authenticationComponent">
+                                     <ref bean="authenticationComponent" />
+                             </entry>
+                     </map>
+             </property>
+     </bean>
+
+     <bean id="scheduledReportExecuterTriggerWeekly" class="org.alfresco.util.CronTriggerBean">
+             <property name="jobDetail">
+                     <ref bean="scheduledReportExecuterJobWeekly" />
+             </property>
+             <property name="scheduler">
+                     <ref bean="schedulerFactory" />
+             </property>
+             <property name="cronExpression">
+                     <!--  Fire at 21:00 every day -->
+                     <value>${reporting.execution.frequency.weekly}</value>
+             </property>
+     </bean>
+     
+<!--  ###############################################  -->
+
+	<bean id="scheduledReportExecuterJobMonthly" class="org.springframework.scheduling.quartz.JobDetailBean">
+             <property name="jobClass">
+                     <value>org.alfresco.repo.jscript.ExecuteScriptJob</value>
+             </property>
+             <property name="jobDataAsMap">
+                     <map>
+                             <entry key="scriptService">
+                                     <ref bean="ScriptService" />
+                             </entry>
+                             <entry key="scriptLocation">
+                                     <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
+                                             <constructor-arg>
+                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerMonthly.js</value>
+                                             </constructor-arg>
+                                     </bean>
+                             </entry>
+                             <entry key="authenticationComponent">
+                                     <ref bean="authenticationComponent" />
+                             </entry>
+                     </map>
+             </property>
+     </bean>
+
+     <bean id="scheduledReportExecuterTriggerMonthly" class="org.alfresco.util.CronTriggerBean">
+             <property name="jobDetail">
+                     <ref bean="scheduledReportExecuterJobMonthly" />
+             </property>
+             <property name="scheduler">
+                     <ref bean="schedulerFactory" />
+             </property>
+             <property name="cronExpression">
+                     <!--  Fire at 21:00 every day -->
+                     <value>${reporting.execution.frequency.monthly}</value>
+             </property>
+     </bean>
+
+</beans>

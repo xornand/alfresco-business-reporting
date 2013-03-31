@@ -1,0 +1,15 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.alfresco.reporting">
+
+<select id="show-tables"  parameterType="int"  resultType="String">
+	show tables;
+</select>
+
+
+<select id="show-table-count"  parameterType="int"  resultType="HashMap">
+	select count(*) from #{tablename};
+</select>
+
+
+</mapper>
