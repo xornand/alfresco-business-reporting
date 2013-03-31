@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<beans> 
+	<databaseIdProvider type="VENDOR" />
+	
+	<bean id="reportingDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:comp/env/jdbc/alfrescoReporting"/>
+	</bean>
+	
+	<!--  MyBatis  config  -->
+	<bean id="reporting_SqlSessionFactory" 	class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="reportingDataSource"/>
+		<property name="configLocation">
+			<value>classpath:alfresco/module/org.alfresco.reporting/mybatis/${reporting.db.hibernate.dialect}/sqlMapConfig.xml</value>
+		</property>
+	</bean>
+	
+	<!--  MyBatis-Spring  sqlSessionTemplate  -->
+	<bean id="reporting_SqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="reporting_SqlSessionFactory"/>
+	</bean> 
+	    
+	<bean id="reportingDAO" class="org.alfresco.reporting.mybatis.impl.ReportingDAOImpl">
+		<property name="reportingTemplate" ref= "reporting_SqlSessionTemplate" />
+		<property name="properties">
+            <ref bean="global-properties"/>
+        </property>
+	</bean>
+	
+</beans>

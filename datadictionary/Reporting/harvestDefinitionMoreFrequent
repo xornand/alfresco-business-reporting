@@ -1,0 +1,10 @@
+# usage:  key = tablename, value=Lucene query
+folder=TYPE:"cm:folder" AND NOT TYPE:"st:site" AND NOT TYPE:"dl:dataList" AND NOT TYPE:"bpm:package" AND NOT TYPE:"cm:systemfolder" AND NOT TYPE:"fm:forum" 
+document=TYPE:"cm:content" AND NOT TYPE:"bpm:task" AND NOT TYPE:"dl:dataListItem" AND NOT TYPE:"ia:calendarEvent" AND NOT TYPE:"lnk:link" AND NOT TYPE:"cm:dictionaryModel" AND NOT ASPECT:"reporting:executionResult"
+calendar=TYPE:"ia:calendarEvent"
+forum=TYPE:"fm:forum"
+link=TYPE:"lnk:link"
+site=TYPE:"st:site"
+#datalist=TYPE:"dl:dataList"
+datalistitem=TYPE:"dl:dataListItem"
+workflowtask=TYPE:"bpm:task"
