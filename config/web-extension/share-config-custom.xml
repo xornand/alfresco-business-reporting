@@ -17,21 +17,6 @@
          	<aspect name="reporting:reportable" />
          </visible>
       </aspects>
-   <!-- 
-   	<config evaluator="node-type" condition="reporting:reportingRoot">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:name" force="true" />
-					<show id="cm:title" force="true" />
-					<show id="cm:description" />
-					<show id="ea:auteur" force="true" for-mode="edit" />
-					<hide id="ea:auteurName" />
-				</field-visibility>
-			</form>
-		</forms>
-	</config>
-	-->
 	</config>
 	
 	<config  evaluator="node-type" condition="reporting:reportTemplate">
@@ -330,7 +315,7 @@
    </config>
    
    
-      <config  evaluator="node-type" condition="reporting:reportingRoot">
+   <config  evaluator="node-type" condition="reporting:reportingRoot">
       <forms>
          <!-- Default form configuration used on the document details and edit metadata pages -->
          <form>
@@ -363,7 +348,7 @@
                   <control template="/org/alfresco/components/form/controls/textfield.ftl" />
                	</field>
                	<field id="reporting:targetQueries">
-                  <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                  <control template="/org/alfresco/components/form/controls/textarea.ftl" />
                	</field>
                	<field id="reporting:executionFrequency" >
 					<control template="/org/alfresco/components/form/controls/selectone.ftl" />
@@ -399,7 +384,7 @@
                   <control template="/org/alfresco/components/form/controls/textfield.ftl" />
                	</field>
                	<field id="reporting:targetQueries">
-                  <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                  <control template="/org/alfresco/components/form/controls/textarea.ftl" />
                	</field>
                	<field id="reporting:executionFrequency" >
 					<control template="/org/alfresco/components/form/controls/selectone.ftl" />
@@ -445,7 +430,7 @@
                   <control template="/org/alfresco/components/form/controls/textfield.ftl" />
                	</field>
                	<field id="reporting:targetQueries">
-                  <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                  <control template="/org/alfresco/components/form/controls/textarea.ftl" />
                	</field>
                	<field id="reporting:executionFrequency" >
 					<control template="/org/alfresco/components/form/controls/selectone.ftl" />

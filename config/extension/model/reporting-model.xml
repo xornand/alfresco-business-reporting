@@ -127,7 +127,7 @@
 				</property>
 				<property name="reporting:targetQueries">
 					<title>Target Queries</title>
-					<description>key=value list of target placeholders like ${site}</description>
+					<description>key=value list of target placeholders like ${site} (seperated by [enter])</description>
 					<type>d:text</type>
 					<default>site=TYPE:"st:site"</default>
 				</property>
@@ -151,7 +151,7 @@
 			<properties>
 				<property name="reporting:targetPath">
 					<title>Target Path</title>
-					<description>Default location the output report will be dropped. can contain ${site} or custom placeholders (adjust the related javascript query)</description>
+					<description>Default location the output report will be dropped. Can contain placeholders like ${site}</description>
 					<type>d:text</type>
 				</property>
 				<property name="reporting:substitution">
