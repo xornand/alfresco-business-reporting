@@ -24,8 +24,11 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.alfresco.reporting.Constants;
 import org.alfresco.reporting.db.DatabaseHelperBean;
 import org.alfresco.service.ServiceRegistry;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -41,39 +44,39 @@ public class ReportingStatus extends AbstractWebScript {
 			throws IOException {
 		
 		
-		//pResponse.getWriter().write("Alfresco Business Reporting Tables:<p>");
-		
 		try {
-			//pResponse.getWriter().write("Harvesting Enabled: " + dbhb.isEnabled() + "\n\n");
-			//pResponse.getWriter().write("Execution Enabled: " + dbhb.isEnabled() nabled() + "\n\n");
-			Map<String, String> tables = dbhb.getShowTablesDetails();
-			SortedSet<String> ss = new TreeSet<String> ( tables.keySet() );
-			Iterator<String> keys = ss.iterator();
-			pResponse.getWriter().write("Alfresco Business Reporting Tables:\n");
-			pResponse.getWriter().write("===================================\n");
-			String lastRun="";
-			String content="";
+			final Map<String, String> tables = dbhb.getShowTablesDetails();
+			
+			final Iterator<String> keys = new TreeSet<String> ( tables.keySet() ).iterator();
+			final JSONObject mainObject = new JSONObject();
+			final JSONArray mainArray = new JSONArray();
+
 			while (keys.hasNext()){
 				String key = (String)keys.next();
-				
-				try{
-					lastRun = dbhb.getLastTimestamp(key);
-					lastRun ="Last successful run started: " + lastRun + " ";
+				if (!Constants.TABLE_LASTRUN.equalsIgnoreCase(key.trim())){
+					JSONObject rowObject = new JSONObject();
+					rowObject.put("table", key.trim());
+					try{
+						rowObject.put("last_run", dbhb.getLastTimestamp(key));
 						
-					content = dbhb.getLastTimestampStatus(key);
-					content = "\t status: " + content + " ";
-							
-				} catch (Exception e){
-					pResponse.getWriter().write("No last successful run... (actually, an exception)\n\n");
-					pResponse.getWriter().write("Exception: " + e.toString()+"\n");
-				}	
-				
-				String[] t = tables.get(key).split(",");
-				String number = t[0];
-				String latest = "\t latest/older: " + t[1] + "/" + t[2];
-				String work   = "\t work/archive: " + t[3] + "/" + t[4];
-				pResponse.getWriter().write("  " + lastRun + content + "\t " + key + "\t (" + number + latest + work + ")\n");
-			}
+						rowObject.put("status", dbhb.getLastTimestampStatus(key));
+						
+					} catch (Exception e){
+						pResponse.getWriter().write("No last successful run... (actually, an exception)\n\n");
+						pResponse.getWriter().write("Exception: " + e.toString()+"\n");
+					}	
+					
+					String[] t = tables.get(key).split(",");
+					rowObject.put("number_of_rows", t[0].toString());
+					rowObject.put("number_of_latest", t[1].toString());
+					rowObject.put("number_of_non_latest", t[2].toString());
+					rowObject.put("number_in_workspace", t[3].toString());
+					rowObject.put("number_in_archivespace", t[4].toString());
+					mainArray.add(rowObject);
+				}
+			} // end while
+			mainObject.put("result", mainArray);
+			pResponse.getWriter().write(mainObject.toJSONString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 

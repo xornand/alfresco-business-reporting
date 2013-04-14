@@ -345,7 +345,7 @@
                   </control>
                </field>
                <field id="reporting:globalExecutionLanguage">
-                  <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                  <control template="/org/alfresco/components/form/controls/selectone.ftl" />
                	</field>
                	<field id="reporting:targetQueries">
                   <control template="/org/alfresco/components/form/controls/textarea.ftl" />
@@ -381,7 +381,7 @@
                  </control>
                </field>
                <field id="reporting:globalExecutionLanguage">
-                  <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                  <control template="/org/alfresco/components/form/controls/selectone.ftl" />
                	</field>
                	<field id="reporting:targetQueries">
                   <control template="/org/alfresco/components/form/controls/textarea.ftl" />
@@ -427,7 +427,7 @@
                   </control>
                	</field>
                	<field id="reporting:globalExecutionLanguage">
-                  <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                  <control template="/org/alfresco/components/form/controls/selectone.ftl" />
                	</field>
                	<field id="reporting:targetQueries">
                   <control template="/org/alfresco/components/form/controls/textarea.ftl" />
