@@ -1,0 +1,62 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.alfresco.reporting">
+
+<update id="lastrun-createTable" parameterType="String" > 
+
+        CREATE TABLE IF NOT EXISTS `lastsuccessfulrun` ( 
+                `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                `isLatest` BOOLEAN DEFAULT TRUE,
+                `tablename` VARCHAR(50),
+                `lastrun` VARCHAR(50),
+                `status` VARCHAR(10),
+        		ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        		 
+</update >
+ 
+<insert id="lastrun-insertTablename" parameterType="String">
+
+  insert `lastsuccessfulrun` (`isLatest`,`tablename`,`lastrun`,`status`)
+  values ('1',#{tablename},'','');
+
+</insert>
+
+
+<update id="lastrun-createTableRow" parameterType="String" > 
+
+	UPDATE `lastsuccessfulrun` 
+			SET 'status` = '#{status}'
+    		WHERE `tablename` = '#{tablename}';
+    		
+</update >    			
+
+
+<update id="lastrun-updateLastSuccessfulRunForTable" parameterType="String" > 
+
+	UPDATE `lastsuccessfulrun` 
+			SET 'status` = '#{status}', `lastrun` = '#{lastrun}'
+			WHERE `tablename` = '#{tablename}';
+    			
+</update >    			
+  		
+
+<select id="lastrun-selectLastRunForTable"  parameterType="String"  resultType="String">    		
+
+    		SELECT `lastrun` + 
+    			FROM `lastsuccessfulrun`
+    			WHERE `tablename` = '#{tableName}';
+</select>
+
+<select id="lastrun-selectCountForTablename"  parameterType="String"  resultType="int">
+
+	SELECT count(*) FROM `lastsuccessfulrun` 
+    	WHERE `tablename` = '#{tablename}';
+
+</select>
+
+
+<delete id="lastrun-emptyTable" parameterType="int">
+  DELETE FROM `lastsuccessfulrun` WHERE ID>0"
+</delete>
+
+</mapper>
