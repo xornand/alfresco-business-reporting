@@ -204,7 +204,11 @@
 		<copy file="${project.dir}/config/web-extension/share-config-custom.xml" todir="${build.dir}/share/META-INF" />
 		
 		<copy todir="${build.dir}/share/alfresco" >
-			<fileset dir="${config.dir}" excludes="extension/**,**/share-config-custom.xml" />
+			<fileset dir="${config.dir}" excludes="extension/**,**/share-config-custom.xml,org/**" />
+		</copy>
+		
+		<copy todir="${build.dir}/share/" >
+			<fileset dir="${config.dir}/web-extension" excludes="site-webscripts" includes="org/**" />
 		</copy>
 		
 		<jar destfile="${share.package.file.jar}" >
