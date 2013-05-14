@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/module/org.alfresco.reporting/scripts/harvestDatabase.lib.js">
+<import resource="classpath:alfresco/module/org_alfresco_reporting/scripts/harvestDatabase.lib.js">
 
 /**
  * Copyright (C) 2011 - 2013 Alfresco Business Reporting project

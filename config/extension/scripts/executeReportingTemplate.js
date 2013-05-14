@@ -16,16 +16,9 @@
  * limitations under the License.
  */
 
-var reportingRef = args["noderef"];
+var report = actions.create("report-container-executer");
+report.execute(document);
 
-logger.log("ReportingRef="+reportingRef);
-
-if (reportingRef!=null){
-	var reportTemplate = search.findNode(reportingRef);
-	var report = actions.create("report-container-executer");
-	report.execute(reportTemplate);
-	
-	var goBack = "<script>history.back();</script>";
-	goBack;
-}
+var goBack = "<script>history.back();</script>";
+goBack;
 

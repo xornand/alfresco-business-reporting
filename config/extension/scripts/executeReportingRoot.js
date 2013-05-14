@@ -16,22 +16,22 @@
  * limitations under the License.
  */
 
-var reportingRef = args["noderef"];
+//var reportingRef = args["noderef"];
 
-logger.log("ReportingRef="+reportingRef);
+//logger.log("ReportingRef="+reportingRef);
 var companyhome = search.luceneSearch("PATH:\"/app:company_home\"")[0];
 
-if (reportingRef!=null){
-	var report = actions.create("report-root-executer");
-	report.parameters.executionFrequency="hourly";
-	report.execute(companyhome);
-	
-	report.parameters.executionFrequency="daily";
-	report.execute(companyhome);
-	
-	report.parameters.executionFrequency="weekly";
-	report.execute(companyhome);
-	
-	report.parameters.executionFrequency="monthly";
-	report.execute(companyhome);
-}
+//if (reportingRef!=null){
+var report = actions.create("report-root-executer");
+report.parameters.executionFrequency="hourly";
+report.execute(companyhome);
+
+report.parameters.executionFrequency="daily";
+report.execute(companyhome);
+
+report.parameters.executionFrequency="weekly";
+report.execute(companyhome);
+
+report.parameters.executionFrequency="monthly";
+report.execute(companyhome);
+//}

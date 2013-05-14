@@ -21,7 +21,7 @@ var timestampsAreDateOnly = false; // the Alfresco default. Change settings if
 
 //------------------------------------------------------------------------
 
-function main(harvestRef, frequency) {
+function main(harvestNode, frequency) {
 	logger.log("Welcome in main!");
 	try{
 		if (reporting.isHarvestEnabled()) {
@@ -50,18 +50,18 @@ function main(harvestRef, frequency) {
 			}
 			
 			logger.log("Checking harvestRef!=null");
-			if (harvestRef!=null){ 
+			if (harvestNode!=null){ 
 				var harvestDefinitions = new Array();
-				var noderef = search.findNode(harvestRef);
-				if (noderef.type=="{http://www.alfresco.org/model/reporting/1.0}harvestDefinition"){
-					harvestDefinitions.push(search.findNode(harvestRef));
-					logger.log("There is valid a nodeRef!! " + harvestRef);
+				//var noderef = search.findNode(harvestRef);
+				if (harvestNode.type=="{http://www.alfresco.org/model/reporting/1.0}harvestDefinition"){
+					harvestDefinitions.push(harvestNode);
+					logger.log("There is valid a nodeRef!! " + harvestNode.name);
 				} else {
-					logger.log("There is a lousy nodeRef!! " + harvestRef);
+					logger.log("There is a lousy nodeRef!! " + harvestNode.name);
 					harvestDefinitions = search.luceneSearch("TYPE:\"reporting:harvestDefinition\"");
 					logger.log(">> It is an All after all!");
 				}
-			}	
+			}
 			
 			logger.log("Number of results: " + harvestDefinitions.length);
 			

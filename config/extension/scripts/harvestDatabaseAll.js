@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/module/org.alfresco.reporting/scripts/harvestDatabase.lib.js">
+<import resource="classpath:alfresco/module/org_alfresco_reporting/scripts/harvestDatabase.lib.js">
 
 /**
  * Copyright (C) 2011 - 2013 Alfresco Business Reporting project
@@ -18,16 +18,10 @@
  * the License.
  */
 
-var harvestRef = args["noderef"];
-try{
-	if (null==harvestRef){
-		main(null, "all");
-	} else {
-		main(harvestRef, "");
-	}
-} catch (whatever){
-// do nothing
-} finally {
-	var goBack = "<script>history.back();</script>";
-	goBack;
+var harvestNode = document;
+
+if (harvestNode.type=="{http://www.alfresco.org/model/reporting/1.0}harvestDefinition"){
+	main(harvestNode, "");	
+} else {
+	main(null, "all");
 }
