@@ -1,6 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
 <beans> 
+
+	<bean id="org.alfresco.reporting.bootstrapMyAmpBundlesBean"
+		class="org.alfresco.web.app.ResourceBundleBootstrap">
+		<property name="resourceBundles">
+			<list>
+				<value>alfresco.modules.org_alfresco_reporting.messages.webclient</value>
+			</list>
+		</property>
+	</bean>
+	
 <!--  http://wiki.alfresco.com/wiki/Java-backed_Web_Scripts_Samples#SimpleWebScript.java -->
 	<bean id="webscript.org.alfresco.reportingstatus.get" 
 		    class="org.alfresco.reporting.webscript.ReportingStatus"
@@ -166,7 +176,7 @@
                     <list> 
                         <value>classpath:alfresco/mimetype/mimetype-map.xml</value>
                         <value>classpath:alfresco/mimetype/mimetype-map-openoffice.xml</value>
-                        <value>classpath:alfresco/extension/mimetype/reporting-mimetype-custom-extension.xml</value>
+                        <value>classpath:alfresco/module/org_alfresco_reporting/mimetype/reporting-mimetype-custom-extension.xml</value>
                     </list>
                 </constructor-arg>
             </bean>

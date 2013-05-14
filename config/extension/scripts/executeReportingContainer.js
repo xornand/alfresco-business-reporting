@@ -16,12 +16,5 @@
  * limitations under the License.
  */
 
-var reportingRef = args["noderef"];
-
-logger.log("ReportingRef="+reportingRef);
-
-if (reportingRef!=null){
-	var reportContainer = search.findNode(reportingRef);
-	var report = actions.create("report-container-executer");
-	report.execute(reportContainer);
-}
+var report = actions.create("report-container-executer");
+report.execute(document);

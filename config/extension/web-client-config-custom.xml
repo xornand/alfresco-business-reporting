@@ -16,6 +16,7 @@
 			<type name="reporting:reportTemplate" />
 			<type name="reporting:harvestDefinition" />
 		</specialise-types>
+
 	</config>
 	
 	<config evaluator="aspect-name" condition="reporting:reportingRootable">
@@ -81,52 +82,66 @@
 		</property-sheet>
 	</config>
 	
+
 	<config>
 		<actions>
-		   <!-- Edit document action to open using normal HTTP access or inline Edit if set -->
 		   <action id="fill_reporting_database">
 		      <label>Fill Reporting Database</label>
 		      <image>/images/icons/recover.gif</image>
-		      <script>/Company Home/Data Dictionary/Scripts/reporting/harvestDatabaseAll.js</script>
 		      <permission allow="true">Write</permission>
-		      <params>
-		         <param name="id">#{actionContext.id}</param>
-		         <param name="noderef">#{actionContext.nodeRef}</param>
-		      </params>
+			   <action-listener>
+                    #{ExecuteScriptHandlerBean.execute}
+                </action-listener>
+                <params>
+                    <param name="id">#{actionContext.id}</param>
+					<param name="script">harvestDatabaseAll.js</param>
+                    <param name="label-id">reporting.harvesting.done</param>
+                    <param name="actionLocation">folder-browse</param>
+                </params>
 		   </action>
 		   
 		   <action id="exectute-reporting-root">
 		      <label>Execute All Reports</label>
 		      <image>/images/icons/completed_workflow_item.gif</image>
-		      <script>/Company Home/Data Dictionary/Scripts/reporting/executeReportingRoot.js</script>
 		      <permission allow="true">Write</permission>
-		      <params>
-		          <param name="id">#{actionContext.id}</param>
-		          <param name="noderef">#{actionContext.nodeRef}</param>
-		      </params>
+			   <action-listener>#{ExecuteScriptHandlerBean.execute}</action-listener>
+                <params>
+                    <param name="id">#{actionContext.id}</param>
+					<param name="script">executeReportingRoot.js</param>
+                    <param name="label-id">reporting.execution.done</param>
+                    <param name="actionLocation">folder-browse</param>
+                </params>
+				
 		   </action>
 		   
 		   <action id="exectute-reporting-container">
 		      <label>Execute Reporting Container</label>
 		      <image>/images/icons/completed_workflow_item.gif</image>
-		      <script>/Company Home/Data Dictionary/Scripts/reporting/executeReportingContainer.js</script>
-		      <permission allow="true">Write</permission>
-		      <params>
-		          <param name="id">#{actionContext.id}</param>
-		          <param name="noderef">#{actionContext.nodeRef}</param>
-		      </params>
+			  <permission allow="true">Write</permission>
+			  <action-listener>#{ExecuteScriptHandlerBean.execute}</action-listener>
+                <params>
+                    <param name="id">#{actionContext.id}</param>
+					<param name="script">executeReportingContainer.js</param>
+                    <param name="label-id">reporting.execution.done</param>
+                    <param name="actionLocation">folder-browse</param>
+                </params>
 		   </action>
 		   
 		   <action id="execute-report">
 		      <label>Execute Report</label>
 		      <image>/images/icons/completed_workflow_item.gif</image>
 		      <permission allow="true">Write</permission>
-		      <script>/Company Home/Data Dictionary/Scripts/reporting/executeReportingTemplate.js</script>
-		      <params>
-		      	  <param name="id">#{actionContext.id}</param>
-		          <param name="noderef">#{actionContext.nodeRef}</param>
-		      </params>
+			  <action-listener>#{ExecuteScriptHandlerBean.execute}</action-listener>
+                <params>
+                    <param name="id">#{actionContext.id}</param>
+					<param name="script">executeReportingTemplate.js</param>
+                    <param name="label-id">reporting.execution.done</param>
+                    <param name="actionLocation">folder-browse</param>
+                </params>
+
 			</action>
+
+
 		</actions>
 	</config>
 	

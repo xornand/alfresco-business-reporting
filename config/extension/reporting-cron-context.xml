@@ -31,7 +31,7 @@
                              <entry key="scriptLocation">
                                      <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
                                              <constructor-arg>
-                                                     <value>alfresco/module/org.alfresco.reporting/scripts/harvestDatabaseMoreFrequent.js</value>
+                                                     <value>alfresco/module/org_alfresco_reporting/scripts/harvestDatabaseMoreFrequent.js</value>
                                              </constructor-arg>
                                      </bean>
                              </entry>
@@ -68,7 +68,7 @@
                              <entry key="scriptLocation">
                                      <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
                                              <constructor-arg>
-                                                     <value>alfresco/module/org.alfresco.reporting/scripts/harvestDatabaseLessFrequent.js</value>
+                                                     <value>alfresco/module/org_alfresco_reporting/scripts/harvestDatabaseLessFrequent.js</value>
                                              </constructor-arg>
                                      </bean>
                              </entry>
@@ -106,7 +106,7 @@
                              <entry key="scriptLocation">
                                      <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
                                              <constructor-arg>
-                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerHourly.js</value>
+                                                     <value>alfresco/module/org_alfresco_reporting/scripts/executeReportingContainerHourly.js</value>
                                              </constructor-arg>
                                      </bean>
                              </entry>
@@ -144,7 +144,7 @@
                              <entry key="scriptLocation">
                                      <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
                                              <constructor-arg>
-                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerDaily.js</value>
+                                                     <value>alfresco/module/org_alfresco_reporting/scripts/executeReportingContainerDaily.js</value>
                                              </constructor-arg>
                                      </bean>
                              </entry>
@@ -182,7 +182,7 @@
                              <entry key="scriptLocation">
                                      <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
                                              <constructor-arg>
-                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerWeekly.js</value>
+                                                     <value>alfresco/module/org_alfresco_reporting/scripts/executeReportingContainerWeekly.js</value>
                                              </constructor-arg>
                                      </bean>
                              </entry>
@@ -220,7 +220,7 @@
                              <entry key="scriptLocation">
                                      <bean class="org.alfresco.repo.jscript.ClasspathScriptLocation">
                                              <constructor-arg>
-                                                     <value>alfresco/module/org.alfresco.reporting/scripts/executeReportingContainerMonthly.js</value>
+                                                     <value>alfresco/module/org_alfresco_reporting/scripts/executeReportingContainerMonthly.js</value>
                                              </constructor-arg>
                                      </bean>
                              </entry>

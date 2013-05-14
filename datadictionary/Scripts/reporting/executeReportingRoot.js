@@ -1,4 +1,4 @@
-<import resource="classpath:alfresco/module/org.alfresco.reporting/scripts/executeReportingRoot.js">
+<import resource="classpath:alfresco/module/org_alfresco_reporting/scripts/executeReportingRoot.js">
 
 try{
 	var goBack = "<script>history.back();</script>";

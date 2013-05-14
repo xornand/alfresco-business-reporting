@@ -410,8 +410,8 @@ public class DatabaseHelperBean {
 	}
 	
 	public int insertIntoTable(Statement stmt, ReportLine rl) throws SQLException{
-		
-		if (rl.getValue("sys_store_protocol").equals("archive")){
+		//logger.debug("### sys_store_protocol="+rl.getValue("sys_store_protocol"));
+		if ("archive".equals(rl.getValue("sys_store_protocol"))){
 			// validFrom = cm_created, validUntil=sys_archivedDate, isLatest=false
 			String created  = rl.getValue("cm_created");
 			String archived = rl.getValue("sys_archivedDate");

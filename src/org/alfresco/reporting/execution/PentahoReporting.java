@@ -341,7 +341,12 @@ public class PentahoReporting implements Reportable {
 				OutputStream outputStream = contentWriter.getContentOutputStream();
 				logger.debug("Got the outputstream: " + outputStream);
 				
-				generateReport(OutputType.PDF, outputStream);					
+				if ("pdf".equalsIgnoreCase(format)){
+					generateReport(OutputType.PDF, outputStream);
+				}
+				if ("excel".equalsIgnoreCase(format)){
+					generateReport(OutputType.EXCEL, outputStream);
+				}
 					
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();

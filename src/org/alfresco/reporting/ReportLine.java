@@ -44,10 +44,13 @@ public class ReportLine {
 	}
 	
 	public void setLine(String key, String type, String value, Properties replacementTypes){
+		if (value==null){
+			value="~~NULL~~";
+		}
 		if ((key!=null) && (type!=null)){
-			if (value==null) value="";
 			type = type.trim();
 			value= value.trim();
+			
 			// validate if the current definition is overridden...
 			if (replacementTypes.containsKey(key)){
 				type = replacementTypes.getProperty(key, "-").trim();
@@ -79,8 +82,9 @@ public class ReportLine {
 	
 	public String getValue(String key){
 		String returnString = values.getProperty(key);
-		if (returnString==null){returnString="";}
-		returnString = returnString.replaceAll("'", "_").replaceAll("\"","_");
+		if (returnString!=null){
+			returnString = returnString.replaceAll("'", "_").replaceAll("\"","_");
+		}
 		return returnString;
 	}
 	
@@ -117,27 +121,39 @@ public class ReportLine {
 	}
 	
 	private String formatValue(String type, String value){
-		String returnString = value;
-		if ("BIGINT,BOOLEAN".indexOf(type)>-1){
-			returnString =  value;
-			if ("".equals(returnString)){
-				returnString="NULL";
-			}
+		String returnString = "''";
+		
+		if ("~~NULL~~".equals(value) || "-".equals(value)){
+			returnString="NULL";
 		} else {
-			if ("DATETIME".equals(type) || "DATE".equals(type)){
-				if ("".equals(value) || "-".equals(value) || (value==null)){
-					returnString="NULL";
-				} else {
+			
+			if ("BIGINT,BOOLEAN".indexOf(type)>-1){
+	
+				returnString =  value;
+				
+			} else {
+				if ("DATETIME".equals(type) || "DATE".equals(type)){
+				
 					try{
 						Date myDate  = new Date(Long.parseLong(value));
 						returnString =  "'" + sdf.format(myDate).replace(" ","T")+"'";
 					} catch (Exception e) {
 						returnString =  "'"+value+"'";	
 					}
+					
+				} else {
+					if ("INTEGER".equals(type) || "DOUBLE PRECISION".equals(type) || 
+									"BIGINT".equals(type) || "FLOAT".equals(type)) {
+							returnString=value;
+					} else { // it is a VARCHAR 
+						returnString =  "'"+value+"'";
+					}
 				}
-			} else {
-				returnString =  "'"+value+"'";
 			}
+		} // end else value==null
+		
+		if (!type.contains("VARCHAR") && "".equals(value)){
+			returnString="NULL";
 		}
 		return returnString;
 	}
