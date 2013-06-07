@@ -204,7 +204,7 @@
 		<copy file="${project.dir}/config/web-extension/share-config-custom.xml" todir="${build.dir}/share/META-INF" />
 		
 		<copy todir="${build.dir}/share/alfresco" >
-			<fileset dir="${config.dir}" excludes="extension/**,**/share-config-custom.xml,org/**" />
+			<fileset dir="${config.dir}" excludes="extension/**,**/share-config-custom.xml,org/**,module/**" />
 		</copy>
 		
 		<copy todir="${build.dir}/share/" >

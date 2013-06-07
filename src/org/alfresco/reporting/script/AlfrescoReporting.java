@@ -942,6 +942,8 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
    
     private void storeRegionPath(Statement stmt, ReportLine rl, NodeRef nodeRef, String regionPath, String columnName, String labelValue){
     	//logger.debug("storeRegionPath: " + table + " | " + regionPath);
+    	columnName = columnName.replaceAll(" ", "_").trim();
+    	columnName = columnName.replaceAll("-", "_").trim();
     	try{
     		String uuid = nodeRef.toString();
     		rl.setLine("sys_node_uuid", getClassToColumnType().getProperty("noderef"), uuid.split("SpacesStore/")[1], getReplacementDataType());
@@ -961,6 +963,8 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
      * @param table
      */
     public void processPerson(String tableName){
+    	tableName = tableName.replaceAll(" ", "_").trim();
+    	tableName = tableName.replaceAll("-", "_").trim();
     	logger.debug("Enter processPerson");
     	dbhb.createEmptyTables(tableName);
     	ReportLine rl = new ReportLine(tableName);
@@ -1105,12 +1109,13 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
     }
     
     
-    public void processAuditingExport(final String auditFeed){
-    	logger.debug("enter processAuditingExport");
+    public void processAuditingExport(String auditFeed){
+    	logger.debug("enter processAuditingExport " + auditFeed);
+    	
     	// http://code.google.com/a/apache-extras.org/p/alfresco-opencmis-extension/source/browse/trunk/src/main/java/org/alfresco/cmis/client/authentication/OAuthCMISAuthenticationProvider.java?r=19
     	if ((auditFeed!=null) && (!"".equals(auditFeed.trim()))){
 	    	String tableName = auditFeed.toLowerCase();
-	    	tableName = tableName.replaceAll("-", "_");
+	    	tableName = tableName.replaceAll("-", "_").replaceAll(" ", "_");
 	    	//setTable(tableName);
 	    	
 	    	dbhb.createEmptyTables(tableName);
@@ -1330,6 +1335,8 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
      * @param tableName
      */
     public void processGroups(String tableName){
+    	tableName = tableName.replaceAll(" ", "_").trim();
+    	tableName = tableName.replaceAll("-", "_").trim();
     	logger.debug("enter processGroups");
     	dbhb.createEmptyTables(tableName);
     	
@@ -1398,6 +1405,8 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
     }
     
     public void processSitePerson(String tableName){
+    	tableName = tableName.replaceAll(" ", "_").trim();
+    	tableName = tableName.replaceAll("-", "_").trim();
     	logger.debug("enter processSitePerson");
     	ReportLine rl = new ReportLine(tableName);
     	Properties replacementTypes = getReplacementDataType();
@@ -1473,7 +1482,7 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
     	logger.debug("Enter processCategoriesAsPath, rootName="+rootName);
     	logger.debug("Currently supporting 3 levels deep structures only!!");
     	if ((rootName!=null) && (!"".equals(rootName))){
-	    	ReportLine rl = new ReportLine(table.toLowerCase());
+	    	ReportLine rl = new ReportLine(table.toLowerCase().replaceAll(" ", "_").replaceAll("-", "_").trim());
 	    	Statement stmt = null;
 	    	Properties definition = new Properties(); // set of propname-proptype
 			definition.setProperty(columnName, getClassToColumnType().getProperty("path","-"));
@@ -1490,8 +1499,7 @@ public class AlfrescoReporting extends BaseScopableProcessorExtension {
 		    		NodeRef catRef = rootRef.getChildRef();
 		    		String actualRootName = (String)serviceRegistry.getNodeService().getProperty(catRef, ContentModel.PROP_NAME);
 		    		if (actualRootName.equals(rootName)){
-		    			
-		    			Collection<ChildAssociationRef> rcrs = serviceRegistry.getCategoryService().getChildren(catRef, Mode.SUB_CATEGORIES, Depth.IMMEDIATE);
+		    	    	Collection<ChildAssociationRef> rcrs = serviceRegistry.getCategoryService().getChildren(catRef, Mode.SUB_CATEGORIES, Depth.IMMEDIATE);
 		    			String labelValue="";
 		    			// process werelddeel
 		    			for (ChildAssociationRef regionChildRef:rcrs){

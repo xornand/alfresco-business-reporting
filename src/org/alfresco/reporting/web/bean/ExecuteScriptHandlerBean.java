@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.executer.ScriptActionExecuter;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.action.Action;
@@ -73,6 +74,7 @@ public class ExecuteScriptHandlerBean {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		NodeRef actionedUponNodeRef = new NodeRef(Repository.getStoreRef(), id);
+		String filename = (String)nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_NAME);
 
 		NodeRef parent = nodeService.getPrimaryParent(actionedUponNodeRef)
 				.getParentRef();
@@ -129,7 +131,7 @@ public class ExecuteScriptHandlerBean {
 			}
 		}
 
-		String msg = Application.getMessage(context, labelId);
+		String msg = Application.getMessage(context, labelId) +" (" + filename + ")";
 
 		FacesMessage fm = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
 		context.addMessage(msg, fm);

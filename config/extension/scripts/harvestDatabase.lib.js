@@ -241,8 +241,10 @@ function processAuditingExport(harvestDefinition) {
 		var feeds = auditFeeds.split(",");
 
 		for ( var f in feeds) {
+			
 			logger.log("processAuditingExport with id: " + f + ", " + feeds[f]);
 			var feed = trim(feeds[f]);
+			
 			if ((feed!=null) && 
 					(feed!=undefined) && 
 					(feed.length>3) && 
@@ -250,6 +252,7 @@ function processAuditingExport(harvestDefinition) {
 
 				logger.log("processAuditingExport with feed: " + feed);
 				var table = feed.toLowerCase();
+				table = table.replace(/ /g,"_");
 				logger.log("processAuditingExport with table: " + table);
 				reporting.createEmptyTables(table);
 
@@ -288,7 +291,8 @@ function processCategories(harvestDefinition) {
 		logger.log("Processing categories: " + tableNames);
 
 		for ( var c = 0; c < categories.length; c++) {
-			var tablename = categories[c].name.toLowerCase();
+			var orig_tablename = categories[c].name.toLowerCase();
+			var tablename = orig_tablename.replace(/ /g,"_");
 			if (!reporting.tableIsRunning(tablename)){
 				
 				logger.log("There we go: " + tablename);
@@ -303,7 +307,7 @@ function processCategories(harvestDefinition) {
 				// update the status of the status table
 				reporting.setLastTimestampStatusRunning(tablename);
 	
-				reporting.processCategoriesAsPath(tablename, // table
+				reporting.processCategoriesAsPath(orig_tablename, // table
 															// name,
 				categories[c].name, // RootCategoryName
 				categories[c].name.toLowerCase() + "Path"); // reporting_table_column_name
