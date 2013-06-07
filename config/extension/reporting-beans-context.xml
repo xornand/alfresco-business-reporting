@@ -6,7 +6,8 @@
 		class="org.alfresco.web.app.ResourceBundleBootstrap">
 		<property name="resourceBundles">
 			<list>
-				<value>alfresco.modules.org_alfresco_reporting.messages.webclient</value>
+				<value>alfresco.extension.org_alfresco_reporting.messages.webclient</value>
+				<value>alfresco.extension.org_alfresco_reporting.messages.reporting</value>
 			</list>
 		</property>
 	</bean>
@@ -176,7 +177,7 @@
                     <list> 
                         <value>classpath:alfresco/mimetype/mimetype-map.xml</value>
                         <value>classpath:alfresco/mimetype/mimetype-map-openoffice.xml</value>
-                        <value>classpath:alfresco/module/org_alfresco_reporting/mimetype/reporting-mimetype-custom-extension.xml</value>
+                        <value>classpath:alfresco/module/org.alfresco.reporting/mimetype/reporting-mimetype-custom-extension.xml</value>
                     </list>
                 </constructor-arg>
             </bean>

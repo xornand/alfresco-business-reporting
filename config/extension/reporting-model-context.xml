@@ -4,7 +4,7 @@
     <bean id="reporting.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/org_alfresco_reporting/model/reporting-model.xml</value>
+                <value>alfresco/module/org.alfresco.reporting/model/reporting-model.xml</value>
             </list>
         </property>
     </bean>
@@ -12,7 +12,7 @@
     <bean id="resourceBundlesWebApp" class="org.alfresco.web.app.ResourceBundleBootstrap">
 		<property name="resourceBundles">
 			<list>
-				<value>alfresco/module/org_alfresco_reporting/messages/reporting</value>
+				<value>alfresco/module/org.alfresco.reporting/messages/reporting</value>
 			</list>
 		</property>
 	</bean>
